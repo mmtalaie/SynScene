@@ -1,0 +1,11 @@
+# IPython Notebook
+.ipynb_checkpoints/
+
+# VScode editor
+.vscode/
+
+# Created data
+output/
+
+
+
