@@ -3,6 +3,7 @@ import numpy
 import glob
 import random
 
+
 class ImageCropper:
     def __init__(self, imageDirectory='./UnusedImage', trashDirectory='./UsedImage', produceCountLimit=100):
         self._imageDirecotry = imageDirectory
@@ -50,17 +51,19 @@ class ImageCropper:
 
     def getImage(self, width, height):
         if(self._takePieceCounter > self._takePieceCounterLimit):
-           hasImage = self._loadNewImage()
-           if(not hasImage):
-               print ("End of images")
-               exit(1)
+            hasImage = self._loadNewImage()
+            if(not hasImage):
+                print("End of images")
+                exit(1)
 
         self._takePieceCounter += 1
         bondingBox = self._generateRandomCadre(width, height)
         output = self._cropImage(bondingBox)
-        
+
         return output
 
     def getCurrentImageSize(self):
         return self._image.size
-        
+
+    def getColoredBackgroundImage(self, width, height, color):
+        return Image.new('RGBA', (width, height), color)
