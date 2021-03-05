@@ -1,11 +1,12 @@
 from PIL import Image
+import os
 import numpy
 import glob
 import random
 
 
 class ImageCropper:
-    def __init__(self, imageDirectory='./UnusedImage', trashDirectory='./UsedImage', produceCountLimit=100):
+    def __init__(self, imageDirectory='UnusedImage', trashDirectory='UsedImage', produceCountLimit=100):
         self._imageDirecotry = imageDirectory
         self._trashDirectory = trashDirectory
         self._imgesAddress = glob.glob(imageDirectory+"/*.jpg")
@@ -16,7 +17,8 @@ class ImageCropper:
     def __loadNewImage(self):
         self._takePieceCounter = 0
         if(len(self._imgesAddress)):
-            self._image = Image.open(self._imgesAddress.pop(0))
+            self._imageName = self._imgesAddress.pop(0)
+            self._image = Image.open(self._imageName)
             print(self._image)
 
             return True
@@ -54,6 +56,8 @@ class ImageCropper:
             return self.__getColoredBackgroundImage(width, height, color)
 
         if(self._takePieceCounter > self._takePieceCounterLimit):
+            destination = self._imageName.replace('UnusedImage','UsedImage')
+            os.rename( self._imageName, destination)
             hasImage = self.__loadNewImage()
             if(not hasImage):
                 print("End of images")
