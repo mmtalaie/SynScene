@@ -11,9 +11,9 @@ class ImageCropper:
         self._imgesAddress = glob.glob(imageDirectory+"/*.jpg")
         self._takePieceCounterLimit = produceCountLimit
         self._takePieceCounter = 0
-        self._loadNewImage()
+        self.__loadNewImage()
 
-    def _loadNewImage(self):
+    def __loadNewImage(self):
         self._takePieceCounter = 0
         if(len(self._imgesAddress)):
             self._image = Image.open(self._imgesAddress.pop(0))
@@ -24,7 +24,7 @@ class ImageCropper:
 
             return False
 
-    def _generateRandomCadre(self, width, height):
+    def __generateRandomCadre(self, width, height):
         (imageWidth, imageHeight) = self._image.size
         if(width <= imageWidth and height <= imageHeight):
             startX = random.randrange(0, imageWidth - width + 1, 1)
@@ -38,7 +38,7 @@ class ImageCropper:
 
             return (-1, -1, -1, -1)
 
-    def _cropImage(self, bondigBox, border=0):
+    def __cropImage(self, bondigBox, border=0):
         image = self._image.crop(bondigBox)
         (width, height) = image.size
         width += border * 2
@@ -49,21 +49,24 @@ class ImageCropper:
 
         return cropped_image
 
-    def getImage(self, width, height):
+    def getImage(self, width, height, coloredImage=False, color=(0, 0, 0, 0)):
+        if(coloredImage):
+            return self.__getColoredBackgroundImage(width, height, color)
+
         if(self._takePieceCounter > self._takePieceCounterLimit):
-            hasImage = self._loadNewImage()
+            hasImage = self.__loadNewImage()
             if(not hasImage):
                 print("End of images")
                 exit(1)
 
         self._takePieceCounter += 1
-        bondingBox = self._generateRandomCadre(width, height)
-        output = self._cropImage(bondingBox)
+        bondingBox = self.__generateRandomCadre(width, height)
+        output = self.__cropImage(bondingBox)
 
         return output
 
     def getCurrentImageSize(self):
         return self._image.size
 
-    def getColoredBackgroundImage(self, width, height, color):
+    def __getColoredBackgroundImage(self, width, height, color):
         return Image.new('RGBA', (width, height), color)
