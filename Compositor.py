@@ -11,11 +11,11 @@ class Compositor:
         self._textGrapher = TextGrapher()
         self._imageCropper = ImageCropper()
 
-    def productImage(self, text, colorBackgrund=False, color=(0, 0, 0, 0)):
+    def productImage(self, text, colorBackgrund=False, color=(0, 0, 0, 0), border=0):
         (icW, icH) = self._imageCropper.getCurrentImageSize()
-        
+
         while True:
-            textImage = self._textGrapher.produceTextImage(text)
+            textImage = self._textGrapher.produceTextImage(text, border)
             (width, height) = textImage.size
             if(width < icW and height < icH):
                 break

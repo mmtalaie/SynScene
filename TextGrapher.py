@@ -91,7 +91,7 @@ class TextGrapher:
         # Done!
         return cropped_image
 
-    def produceTextImage(self, text="سلام"):
+    def produceTextImage(self, text="سلام", border=0):
         color = self.__selectRandomColor()
         backgroundColor = (color[0], color[1], color[2], 0)
         size = self.__randomSize(80, 150, 1)
@@ -105,7 +105,7 @@ class TextGrapher:
         else:
             fontColor = color
 
-        print(F"text opacity = {fontColor[3]}")
+        # print(F"text opacity = {fontColor[3]}")
 
         unicodeFont = ImageFont.truetype(
             f"./fonts/{self.__selectRandomFont()[1]}", size)
@@ -114,7 +114,7 @@ class TextGrapher:
                   fill=fontColor, direction='rtl', align='left')
 
         bbox = (self.__selectTextCadre(image))
-        cruppedImage = self.__autocropImage(image, bbox)
+        cruppedImage = self.__autocropImage(image, bbox, border)
 
         foreground = Image.new('RGBA', cruppedImage.size, color)
         foreground.paste(cruppedImage)
