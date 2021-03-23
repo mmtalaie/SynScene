@@ -3,19 +3,29 @@ from Compositor import *
 import glob
 import random
 
+i = 1
 textDirectory = "text/ArmanPersoNERCorpus"
 txtAddress = glob.glob(textDirectory+"/*.txt")
 print(txtAddress)
 composer = Compositor()
-fileDict = open("output/gt1.txt", "a")
-ingsDirectory = "output/imgs1"
+fileDict = open("output/gt" + str(i) + ".txt", "a")
+imgsDirectory = "output/imgs" + str(i)
+
 try:
-    os.stat(ingsDirectory)
+    os.stat("output")
 except:
-    os.mkdir(ingsDirectory)
+    os.mkdir("output")
+
+
+try:
+    os.stat(imgsDirectory)
+except:
+    os.mkdir(imgsDirectory)
+
+
 a = 0
 
-f = open(txtAddress[0])
+f = open(txtAddress[i - 1])
 while True:
     line = f.readline()
     if not line:
@@ -24,10 +34,11 @@ while True:
     if(words[0] == "ـ"):
         continue
     color = (int(random.random() * 255), int(random.random()
-                * 255), int(random.random() * 255), 255)
+                                             * 255), int(random.random() * 255), 255)
     img = composer.productImage(words[0], True, color, border=3)
-    img.save(ingsDirectory + "/word_" + str(a) + ".png")
-    fileDict.write(ingsDirectory + "/word_"+str(a)+".png\t"+words[0]+"\n")
+    img.save(imgsDirectory + "/word"+str(i)+"_" + str(a) + ".png")
+    fileDict.write(imgsDirectory + "/word"+str(i) +
+                   "_" + str(a)+".png\t"+words[0]+"\n")
     fileDict.flush()
     a += 1
-    print("imgs/word_"+str(a)+".png\t"+words[0]+"\n")
+    print(imgsDirectory + "/word"+str(i)+"_" + str(a)+".png\t"+words[0]+"\n")
