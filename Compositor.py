@@ -1,10 +1,9 @@
-from PIL import Image
+from PIL import Image ,ImageOps
 from ImageCropper import *
 from TextGrapher import *
 import numpy as np
 import random
 import os
-
 
 class Compositor:
     def __init__(self):
@@ -22,5 +21,6 @@ class Compositor:
 
         backImage = self._imageCropper.getImage(
             width, height, colorBackgrund, color)
-
-        return Image.alpha_composite(backImage, textImage)
+        colored = Image.alpha_composite(backImage, textImage)
+        gray = ImageOps.grayscale(colored)
+        return gray
