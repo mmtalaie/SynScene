@@ -23,7 +23,7 @@ except:
     os.mkdir(imgsDirectory)
 
 
-a = 0
+a = 53455 
 
 f = open(txtAddress[i - 1])
 while True:
@@ -31,7 +31,7 @@ while True:
     if not line:
         break
     words = line.split(" ")
-    if(words[0] == "ـ"):
+    if(words[0] == "ـ" and words[0] == "\n"):
         continue
     color = (int(random.random() * 255), int(random.random()
                                              * 255), int(random.random() * 255), 255)

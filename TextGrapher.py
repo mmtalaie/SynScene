@@ -11,8 +11,6 @@ class TextGrapher:
 
         self._direction = ['rtl', 'utd']
 
-        self._noise = ['none', 'saltAndPeper']
-
         self._color = (0, 0, 0, 0)
 
         self._fontSize = 10
@@ -28,9 +26,6 @@ class TextGrapher:
 
     def __selectRandomFont(self):
         return random.choice(list(enumerate(self._fonts)))
-
-    def __selectRandomNoise(self):
-        return random.choice(list(enumerate(self._noise)))
 
     def __selectRandomDirection(self):
         return random.choice(list(enumerate(self._direction)))
