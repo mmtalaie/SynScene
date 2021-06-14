@@ -23,7 +23,7 @@ except:
     os.mkdir(imgsDirectory)
 
 
-a = 53455 
+a = 53455
 
 f = open(txtAddress[i - 1])
 while True:
@@ -35,7 +35,7 @@ while True:
         continue
     color = (int(random.random() * 255), int(random.random()
                                              * 255), int(random.random() * 255), 255)
-    img = composer.productImage(words[0], True, color, border=3)
+    img = composer.productImage(words[0], True, 'random', color, border=3)
     img.save(imgsDirectory + "/word"+str(i)+"_" + str(a) + ".png")
     fileDict.write(imgsDirectory + "/word"+str(i) +
                    "_" + str(a)+".png\t"+words[0]+"\n")
