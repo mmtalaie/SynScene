@@ -30,4 +30,4 @@ while(len(txtAddress) > 0):
         fileDict.write(ingsDirectory + "/word_"+str(a)+".png\t"+words[0]+"\n")
         fileDict.flush()
         a += 1
-        print("imgs/word_"+str(a)+".png\t"+words[0]+"\n")
+        # print("imgs/word_"+str(a)+".png\t"+words[0]+"\n")

@@ -10,5 +10,16 @@ output/
 # cache data
 __pycache__/
 
+text/
 
+UnusedImage/
 
+UsedImage/
+
+BadImages/
+
+TempImage/
+
+__pycache__/
+
+*.pyc

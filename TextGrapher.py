@@ -86,7 +86,7 @@ class TextGrapher:
         # Done!
         return cropped_image
 
-    def produceTextImage(self, text="سلام", border=0):
+    def produceTextImage(self, text="سلام", border=0, randomOpacity=False):
         color = self.__selectRandomColor()
         backgroundColor = (color[0], color[1], color[2], 0)
         size = self.__randomSize(80, 150, 1)
@@ -95,7 +95,7 @@ class TextGrapher:
 
         wrapped = textwrap.fill(text)
 
-        if (self.__useRandomOpacity):
+        if (self.__useRandomOpacity and randomOpacity):
             fontColor = (color[0], color[1], color[2], self.__randomOpacity())
         else:
             fontColor = color

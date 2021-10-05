@@ -16,14 +16,27 @@ class ImageCropper:
 
     def __loadNewImage(self):
         self._takePieceCounter = 0
+        while len(self._imgesAddress):
+            try:
+                self._imageName = self._imgesAddress.pop(0)
+                destination = self._imageName.replace(
+                    'UnusedImage', 'TempImage')
+                os.rename(self._imageName, destination)
+                self._imageName = destination
+                self._image = Image.open(self._imageName)
+                size = self._image.size
+                if(size[0] > 200 and size[1] > 200):
+                    break
+                else:
+                    destination = self._imageName.replace(
+                        'TempImage', 'BadImages')
+                    os.rename(self._imageName, destination)
+            except:
+                continue
+        print(self._imageName)
         if(len(self._imgesAddress)):
-            self._imageName = self._imgesAddress.pop(0)
-            self._image = Image.open(self._imageName)
-            print(self._image)
-
             return True
         else:
-
             return False
 
     def __generateRandomCadre(self, width, height):
@@ -56,8 +69,8 @@ class ImageCropper:
             return self.__getColoredBackgroundImage(width, height, color)
 
         if(self._takePieceCounter > self._takePieceCounterLimit):
-            destination = self._imageName.replace('UnusedImage','UsedImage')
-            os.rename( self._imageName, destination)
+            destination = self._imageName.replace('TempImage', 'UsedImage')
+            os.rename(self._imageName, destination)
             hasImage = self.__loadNewImage()
             if(not hasImage):
                 print("End of images")

@@ -14,9 +14,10 @@ class Compositor:
         # self._noise = ['saltAndPeper', 'rotate', 'shear', 'polarWarping',
         #                'piecewiseAffine', 'clahe', 'perspectiveTransform']
         self._noise = ['saltAndPeper', 'rotate', 'shear',
-                       'piecewiseAffine', 'clahe', 'perspectiveTransform']
-        self._rotate = iaa.Affine(rotate=(-25, 25))
-        self._shear = iaa.Affine(shear=(-25, 25))
+                       'piecewiseAffine', 'clahe', 'perspectiveTransform', 'blur']
+        self._rotate = iaa.Affine(rotate=(-30, 30), fit_output=True)
+        self._shear = iaa.Affine(shear=(-25, 25), fit_output=True)
+        self._blur = iaa.GaussianBlur(sigma=(0.0, 1.5))
         self._piecewiseAffine = iaa.PiecewiseAffine(scale=(0.01, 0.04))
         self._polarWarping = iaa.WithPolarWarping(
             iaa.CropAndPad(percent=(-0.08, 0.08)))
@@ -30,10 +31,12 @@ class Compositor:
         return random.choice(list(enumerate(self._noise)))
 
     def __applyNoise(self, image, noise):
-        print("noise = " + noise)
+        # print("noise = " + noise)
         image = np.array(image)
         if('saltAndPeper' in noise):
             image_noisy = self._saltAndPeper.augment_image(image)
+        if('blur' in noise):
+            image_noisy = self._blur.augment_image(image)
         if('rotate' in noise):
             image_noisy = self._rotate.augment_image(image)
         if('shear' in noise):
@@ -86,11 +89,12 @@ class Compositor:
 
         return noiseOrd
 
-    def productImage(self, text, colorBackgrund=False, noise='off', color=(0, 0, 0, 0), border=0, grayScale=True):
+    def productImage(self, text, colorBackgrund=False, noise='off', color=(0, 0, 0, 0), border=0, grayScale=True, transparency=False):
         (icW, icH) = self._imageCropper.getCurrentImageSize()
 
         while True:
-            textImage = self._textGrapher.produceTextImage(text, border)
+            textImage = self._textGrapher.produceTextImage(
+                text, border, transparency)
             (width, height) = textImage.size
             if(width < icW and height < icH):
                 break
@@ -104,7 +108,7 @@ class Compositor:
             noiseCount = self.__getCountOfNoiseByChanse()
             if(noiseCount > 0):
                 noiseInstruction = self.__generateRandomNoiseOrder(noiseCount)
-                print('noises = ' + noiseInstruction)
+                # print('noises = ' + noiseInstruction)
                 singleInstructions = noiseInstruction.split('-')
                 for instruction in singleInstructions:
                     colored = self.__applyNoise(colored, instruction)
