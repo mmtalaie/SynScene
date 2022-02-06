@@ -1,1 +1,4 @@
-python3 /home/mmt/myThesis/CreateDataSet/CreateDatasetMultiRunning.py --corpus_address ./text/tabnak12.txt --image_background --noise random
+python3 /home/mmt/myThesis/CreateDataSet/CreateDatasetMultiRunning.py --corpus_address ./text/number/incremental1.txt --image_background --noise random
+
+
+python3 /home/mmt/myThesis/CreateDataSet/CreateDatasetMultiRunning.py --corpus_address ./text/tabnak34.txt --image_background --noise random

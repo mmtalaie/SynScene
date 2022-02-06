@@ -1,5 +1,6 @@
 from imgaug import augmenters as iaa
 from PIL import Image, ImageOps
+from imgaug.augmenters.geometric import Rotate
 from ImageCropper import *
 from TextGrapher import *
 import numpy as np
@@ -89,12 +90,16 @@ class Compositor:
 
         return noiseOrd
 
-    def productImage(self, text, colorBackgrund=False, noise='off', color=(0, 0, 0, 0), border=0, grayScale=True, transparency=False):
+    def productImage(self, text, colorBackgrund=False, noise='off', color=(0, 0, 0, 0), border=0, grayScale=False, transparency=False, number=False):
         (icW, icH) = self._imageCropper.getCurrentImageSize()
 
         while True:
-            textImage = self._textGrapher.produceTextImage(
-                text, border, transparency)
+            if(number):
+                textImage = self._textGrapher.produceTextImage(
+                    text, border, transparency, direction='ltr')
+            else:
+                textImage = self._textGrapher.produceTextImage(
+                    text, border, transparency)
             (width, height) = textImage.size
             if(width < icW and height < icH):
                 break
@@ -110,6 +115,14 @@ class Compositor:
                 noiseInstruction = self.__generateRandomNoiseOrder(noiseCount)
                 # print('noises = ' + noiseInstruction)
                 singleInstructions = noiseInstruction.split('-')
+                if 'rotate' in singleInstructions:
+                    singleInstructions.remove('rotate')
+                    textImage = self.__applyNoise(textImage, 'rotate')
+                    (width, height) = textImage.size
+                backImage = self._imageCropper.getImage(
+                    width, height, colorBackgrund, color)
+
+                colored = Image.alpha_composite(backImage, textImage)
                 for instruction in singleInstructions:
                     colored = self.__applyNoise(colored, instruction)
 

@@ -19,6 +19,14 @@ class TextGrapher:
 
         self._angle = 0
 
+        self._kashidaChance = 0.3
+        self._chasbide = 'بپتثجچحخسشصضطظعغفقکگلمنهیئ'
+        self._character = 'آأإابپتثجچحخدذرزژسشصضطظعغفقکگلمنوؤهئی'
+        self._stringsPossibleKashida = []
+        for cchar in self._chasbide:
+            for char in self._character:
+                self._stringsPossibleKashida.append(cchar+char)
+
     def __selectRandomColor(self):
         self._color = (int(random.random() * 255),
                        int(random.random() * 255), int(random.random() * 255), 255)
@@ -86,13 +94,33 @@ class TextGrapher:
         # Done!
         return cropped_image
 
-    def produceTextImage(self, text="سلام", border=0, randomOpacity=False):
+    def __addKashida(self, text):
+        self.kText = text
+
+        # map(self.__replaceKashida, self._stringsPossibleKashida)
+        for subtxt in self._stringsPossibleKashida:
+            self.__replaceKashida(subtxt)
+        return self.kText
+
+    def __replaceKashida(self, subtxt):
+        count = random.random()
+        kashida = '\u0640'
+        if(count > 0.9):
+            kashida *= 3
+        elif (count > 8):
+            kashida *= 2
+        self.kText = self.kText.replace(
+            subtxt, subtxt[:1] + kashida + subtxt[1:])
+
+    def produceTextImage(self, text="سـلام", border=0, randomOpacity=False, useKashida=True, direction='rtl'):
         color = self.__selectRandomColor()
         backgroundColor = (color[0], color[1], color[2], 0)
         size = self.__randomSize(80, 150, 1)
         image = Image.new('RGBA', (size * 10, size * 10), backgroundColor)
         draw = ImageDraw.Draw(image)
-
+        if(useKashida):
+            if(random.random() < self._kashidaChance):
+                text = self.__addKashida(text)
         wrapped = textwrap.fill(text)
 
         if (self.__useRandomOpacity and randomOpacity):
@@ -106,7 +134,7 @@ class TextGrapher:
             f"./fonts/{self.__selectRandomFont()[1]}", size)
 
         draw.text((100, 100), wrapped, spacing=30, font=unicodeFont,
-                  fill=fontColor, direction='rtl', align='left')
+                  fill=fontColor, direction=direction, align='left')
 
         bbox = (self.__selectTextCadre(image))
         cruppedImage = self.__autocropImage(image, bbox, border)

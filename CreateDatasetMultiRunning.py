@@ -35,16 +35,22 @@ def synthesis(opt):
             line = corpus.readline()
             if not line:
                 break
-            words = line.split(" ")
+            words = []
+            if(not opt.phone_number):
+                words = line.split(" ")
+            else:
+                words.append(line)
             if(words[0] == "ـ" or words[0] == "\n" or words[0] == '،' or words[0] == '.'):
                 continue
             word = words[0].replace('\n', '')
             color = (int(random.random() * 255), int(random.random()
                                                      * 255), int(random.random() * 255), 255)
             img = composer.productImage(
-                word, colorBackgrund, noise, color, border=3)
+                word, colorBackgrund, noise, color, border=3, number=opt.phone_number)
             imageAddress = imgsDirectory + "/" + str(counter) + ".png"
             img.save(imageAddress)
+            if(opt.phone_number):
+                word = word.replace(' ', '')
             imageLable = imageAddress + "\t"+word+"\n"
             fileDict.write(imageLable)
             fileDict.flush()
@@ -63,12 +69,16 @@ def synthesis(opt):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--corpus_address', type=str,
-                        help='Where to store corpus', default='text/tabnak1.txt')
+                        help='Where to store corpus', default='text/number/phoneNumber.txt')
     parser.add_argument('--colored_background',
                         dest='color_background', action='store_true')
     parser.add_argument('--image_background',
                         dest='color_background', action='store_false')
     parser.set_defaults(color_background=True)
+
+    parser.add_argument(
+        '--phone_number', dest='phone_number', action='store_true')
+    parser.set_defaults(phone_number=True)
     # help='Set to synthesised images has color back ground or image background. set True or False', default=False)
     parser.add_argument(
         '--noise', type=str, help='Set type of noise applied on images. use random for use all of noises or set empty', default='random')
