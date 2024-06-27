@@ -5,21 +5,25 @@
 .vscode/
 
 # Created data
-output/
+output/*.*
 
 # cache data
 __pycache__/
 
-text/
+text/*.*
 
-UnusedImage/
+UnusedImage/*.*
 
-UsedImage/
+UsedImage/*.*
 
-BadImages/
+BadImages/*.*
 
-TempImage/
+TempImage/*.*
 
 __pycache__/
 
 *.pyc
+
+fonts/*.*
+
+!.gitkeep
